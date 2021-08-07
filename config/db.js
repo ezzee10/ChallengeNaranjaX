@@ -8,9 +8,9 @@ const conectarDB = async () => {
 			useCreateIndex: true,
 			useUnifiedTopology: true
 		})
-		console.log('Conexión a MongoDB establecida')
+		console.log('Conexión con BD establecida')
 	} catch (error) {
-		console.log('Conexión a MongoDB rechazada \n' + error)
+		console.log('Conexión con BD rechazada \n' + error)
 	}
 }
 

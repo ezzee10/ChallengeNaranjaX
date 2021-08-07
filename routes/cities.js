@@ -1,41 +1,34 @@
-const express = require ('express')
-const router = express.Router()
-const City = require('../models/cityModel')
+const { Router } = require('../cityCase/cityModule')
+const router = new Router()
+const { post, get } = require('../cityCase/cityController')
 
-/* obtiene todas las ciudades */
-router.get('/all', async (req, res) => {
-	try {
-		let cities = await City.find({})
-		res.json({cities})
-	} catch (e) {
-		res.status(500).json('Error del servidor')
-	}
-})
+/* Obtener todas las ciudades */
+router.get('/all', get.getCities)
+/* Obtener ciudad por id */
+router.get('/city/:id', get.getCity) 
+/* Obtener ciudad por nombre */
+router.get('/city', get.getCityByQuery)
 
-/* crear una nueva ciudad */
-router.post('/', async (req, res) => {
+/* Crear una nueva ciudad */
+router.post('/', post.createCity)
 
-	const name = req.body.name
+module.exports = router
 
-	//Reviso primero si ya hay una ciudad con ese nombre
-	const city_bd = await City.findOne({ name })
 
-	if(city_bd) {
-		return res.status(400).json({ msg: 'Ya existe una ciudad con ese nombre' })
-	}
 
-	const newCity = new City({
-		name: req.body.name,
-		country: req.body.country,
-		img:  req.body.img
-	})
 
-	try {
-		const city = await newCity.save()
-		res.send(city)
-	} catch (e) {
-		res.status(500).json('Error del servidor')
-	}
-})
 
+
+
+
+
+
+
+
+
+
+
+
+
+  
 module.exports = router
