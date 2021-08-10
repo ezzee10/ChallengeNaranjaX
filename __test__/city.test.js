@@ -138,7 +138,7 @@ describe('DELETE /api/cities/city/:id', () => {
 
 		const id_real = '123123213312321213' //Id real de la BD
 
-		const response = await request(app).put(`/api/cities/city/${id_real}`)
+		const response = await request(app).delete(`/api/cities/city/${id_real}`)
 		// expect(response.status).toBe(200)
 		// expect(response.body.ok).toBe(true)
 		// expect(response.body).not.toBeNull()
