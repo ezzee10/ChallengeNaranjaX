@@ -8,8 +8,8 @@ const getCities = async (req, res = response) => {
 		const citiesDb = await cityRepository.getAll()
 		const count = await cityRepository.count()  
 
-		if(!citiesDb || citiesDb.length === 0){
-			return res.status(401).json({
+		if(citiesDb.length === 0){
+			res.status(401).json({
 				ok: false,
 				message: 'No hay ciudades'
 			})
@@ -18,7 +18,7 @@ const getCities = async (req, res = response) => {
 		res.status(200).json({
 			ok: true,
 			message: 'Ciudades',
-			cities: citiesDb,
+			response: citiesDb,
 			total: count
 		})  
 	} catch (err) {
@@ -33,28 +33,28 @@ const getCities = async (req, res = response) => {
 /* Obtener una ciudad por id (PathParam)*/
 const getCity = async (req, res = response) => {
 
-	const id = req.params.id
+	const { id } = req.params
   
 	try {
 		const cityDb = await cityRepository.getOne(id)
   
-		if(!cityDb || cityDb.length === 0){
-			return  res.status(400).json({
+		if(!cityDb){
+			return res.status(400).json({
 				ok:false,
-				message: 'No se encontró la ciudad solicitada'
+				message: 'The requested city was not found'
 			})
 		}
     
 		return res.status(200).json({
 			ok: true,
-			message: 'Ciudad',
+			message: 'Found city',
 			cities: cityDb
 		})  
   
 	} catch (err) {
-		res.status(500).json({
+		return res.status(500).json({
 			ok:false,
-			message: 'Error interno del servidor',
+			message: 'Internal Server Error',
 			err
 		})
 	}
@@ -63,31 +63,29 @@ const getCity = async (req, res = response) => {
 /* Obtener una ciudad por nombre (QueryParam) */
 const getCityByQuery = async (req, res = response) => {
 
-	const name = req.query.name
-
-	console.log(name)
+	const { name } = req.query
   
 	try {
   
 		const cityDb = await cityRepository.getCityByName(name)
   
-		if(!cityDb || cityDb.length === 0){
+		if(!cityDb){
 			return  res.status(400).json({
 				ok:false,
-				message: 'No se encontró la ciudad solicitada'
+				message: 'The requested city was not found'
 			})
 		}
     
 		return res.status(200).json({
 			ok: true,
-			message: 'Ciudad',
+			message: 'Found city',
 			cities: cityDb
 		})  
   
 	} catch (err) {
 		res.status(500).json({
 			ok:false,
-			message: 'Error Interno del Servidor',
+			message: 'Internal Server Error',
 			err
 		})
 	}
