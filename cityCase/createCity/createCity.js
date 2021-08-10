@@ -1,33 +1,33 @@
 const { City, response } = require('../cityModule')
+const cityRepository = require('../../repositories/cityRepository')
 
 const createCity = async (req, res = response) =>  {
 
-	let { name, country, img }  = req.body
+	let { name, country, img } = req.body
 
 	//Reviso primero si ya existe una ciudad con ese nombre
-	const cityDb = await City.findOne({ name })
+	const cityDb = await cityRepository.getCityByName( name )
 
 	if(cityDb) {
-		return res.status(400).json({ msg: 'Ya existe una ciudad con ese nombre' })
+		return res.status(400).json({ 
+			ok: false,
+			message: 'There is already a city with that name' 
+		})
 	}
 
-	const newCity = new City({
-		name: name,
-		country: country,
-		img:  img
-	})
+	const newCity = new City({ name, country, img })
 
 	try {
 		const city = await newCity.save()
-		res.send(201).json({
+		res.status(201).json({
 			ok: true,
-			message: 'La ciudad se creó correctamente',
-			city
+			message: 'The city was created successfully',
+			response: city
 		})
 	} catch (err) {
 		res.status(500).json({
 			ok: false,
-			message: 'Error al crear una nueva ciudad',
+			message: 'Internal Server Error',
 			err
 		})
 	}
