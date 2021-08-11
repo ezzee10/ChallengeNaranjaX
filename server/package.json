@@ -1,0 +1,44 @@
+{
+  "name": "challengenaranjax",
+  "version": "1.0.0",
+  "description": "Challenge NaranjaX Itinerario",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest --runInBand",
+    "start": "concurrently \"nodemon server.js\" \"cd ../client && npm start \""
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ezzee10/ChallengeNaranjaX.git"
+  },
+  "keywords": [
+    "Itinerario"
+  ],
+  "author": "Ezequiel Colombano",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ezzee10/ChallengeNaranjaX/issues"
+  },
+  "homepage": "https://github.com/ezzee10/ChallengeNaranjaX#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^6.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.12.1",
+    "jest": "^27.0.6",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.13.5",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "supertest": "^6.1.4"
+  }
+}
