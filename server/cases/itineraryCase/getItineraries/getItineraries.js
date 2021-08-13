@@ -2,7 +2,7 @@ const {response} = require('../itineraryModule')
 const cityRepository = require('../../../repositories/cityRepository')
 const itineraryRepository = require('../../../repositories/itineraryRepository')
 
-/* Obtener todos los itinerarios */
+/* Get all itineraries */
 const getItineraries = async (req, res = response) => { 
   
 	try {
@@ -31,7 +31,39 @@ const getItineraries = async (req, res = response) => {
 	} 
 }
 
-/* Obtener itinerarios por nombre de ciudad */
+/* Get itinerary by city ID */
+const getItineraryByCityId = async (req, res = response) => {
+
+	const { id } = req.params
+
+	try {
+		
+		const city = await cityRepository.getOne(id)
+		const itineraryCity = await itineraryRepository.getItinerariesByCity(city._id) //return an array
+
+		if(!itineraryCity.length === 0){
+			return  res.status(400).json({
+				ok:false,
+				message: 'No itinerary found'
+			})
+		}
+    
+		return res.status(200).json({
+			ok: true,
+			message: 'Itineraries',
+			response: itineraryCity
+		})  
+  
+	} catch (err) {
+		res.status(500).json({
+			ok:false,
+			message: 'Internal Server Error',
+			err
+		})
+	}
+}
+
+/* Get itinerary by city */
 const getItineraryByNameCity = async (req, res = response) => {
 
 	try {
@@ -42,20 +74,20 @@ const getItineraryByNameCity = async (req, res = response) => {
 		if(!itinerariesDb || itinerariesDb.length === 0){
 			return  res.status(400).json({
 				ok:false,
-				message: 'No hay itinerarios creados para la ciudad solicitada'
+				message: 'There are no itineraries for the requested city'
 			})
 		}
     
 		return res.status(200).json({
 			ok: true,
-			message: 'Itirenarios',
+			message: 'Itineraries',
 			cities: itinerariesDb
 		})  
   
 	} catch (err) {
 		res.status(500).json({
 			ok:false,
-			message: 'Error Interno del Servidor',
+			message: 'Internal Server Error',
 			err
 		})
 	}
@@ -63,6 +95,7 @@ const getItineraryByNameCity = async (req, res = response) => {
   
 module.exports = {
 	getItineraries,
+	getItineraryByCityId,
 	getItineraryByNameCity
 }
   

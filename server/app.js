@@ -13,8 +13,9 @@ conectarDB()
 const port = process.env.PORT || 4000
 
 app.use('/api/cities', require('./routes/cities'))
-app.use('/api/itineraries', require('./routes/itineraries'))
+app.use('/api', require('./routes/itineraries'))
 app.use('/api/user', require('./routes/users'))
+
 
 module.exports = {
 	port,

@@ -1,7 +1,9 @@
 const get = require('./getUser/getUser')
-const post = require('./authUser/authUser')
+const login = require('./loginUser/loginUser')
+const register = require('./registerUser/registerUser')
 
 module.exports = {
-	post,
-	get
+	get,
+	login,
+	register
 }
