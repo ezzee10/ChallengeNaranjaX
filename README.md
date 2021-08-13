@@ -44,12 +44,11 @@ Itinerario de ciudades el cual permite crear ciudades y mostrarlas en el lado de
 * [MongoDB](https://www.mongodb.com/es)
 
 
-## SPRINT 3
+## SPRINT 4 -- FINAL
 
 Funcionalidades añadidas:
-* Creación de endpoints de register y login.
-* Implementación de JWT y Passport.
-* Implementación de Express-Validator.
+* CRUD de comentarios y likes en los itinerarios.
+* Login persistente mediante JWT y LocalStorage
 
 ## Comenzando
 

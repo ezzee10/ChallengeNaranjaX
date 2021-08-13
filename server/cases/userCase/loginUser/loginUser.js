@@ -1,47 +1,10 @@
-const { User, response } = require('../userModule')
-const { validationResult } = require('express-validator')
-const jwt = require('jsonwebtoken')
 const userRepository = require('../../../repositories/userRepository')
+const jwt = require('jsonwebtoken')
+const { response } = require('../userModule')
+const { validationResult } = require('express-validator')
 
-const signUp = async (req, res = response) =>  {
 
-	let { firstName, lastName, email, password, userPic, country } = req.body
-
-	//Check errorrs
-	const errors = validationResult(req)
-	if (!errors.isEmpty()) {
-		return res.status(400).json({ errors: errors.array() })
-	}
-
-	try {
-
-		//Create a new user
-		let newUser = new User({ 
-			firstName, 
-			lastName, 
-			email, 
-			password: await userRepository.encryptPassword(password), //Hash the password
-			userPic, 
-			country 
-		})
-
-		//Saving user in mongoDB
-		let savedUser = await newUser.save()
-
-		res.status(201).json({
-			success: true,
-			message: 'The user was created successfully',
-			response: savedUser
-		})
-	} catch (err) {
-		res.status(500).json({
-			success: false,
-			message: 'An error occurred while creating a user',
-			err
-		})
-	}
-}
-
+/* Login user */
 const signIn = async (req, res = response) => {
 
 	let { email, password } = req.body
@@ -62,7 +25,7 @@ const signIn = async (req, res = response) => {
 
 		if (!matchPassword)
 			return res.status(401).json({ 		
-				ok: false,
+				success: false,
 				message: 'Invalid password',
 				token: null
 			})
@@ -75,8 +38,8 @@ const signIn = async (req, res = response) => {
 		}	
 		
 		const options = { expiresIn: 2592000 }
-		
-		// Firmo el token
+
+		// Sign the token
 		jwt.sign( payload, process.env.SECRET_OR_KEY, options ,
 			(err, token) => {
 				if(err){
@@ -87,14 +50,45 @@ const signIn = async (req, res = response) => {
 				}else {
 					res.json({
 						success: true,
-						response: { token } //Lo guardo como objeto ya que lo requiere el front en localStorage 
+						response: { token, userPic: userFound.userPic, firstName: userFound.firstName} 
 					})
 				}
 			}
 		)
+
 	} catch (err) {
 		return res.status(500).json({
-			ok: false,
+			success: false,
+			message: 'Failed to authenticate user',
+			err
+		})
+	}
+}
+
+/*Login with LocalStorage*/
+const signInLs = async (req, res = response) => {
+
+	const { userPic, firstName } = req.user
+
+	try {
+
+		if (!req.user)
+			return res.status(401).json({ 		
+				success: false,
+				message: 'Not info user',
+			})
+		
+		return res.status(200).json({
+			success: true,
+			response: {
+				userPic,
+				firstName
+			}
+		})
+
+	} catch (err) {
+		return res.status(500).json({
+			success: false,
 			message: 'Failed to authenticate user',
 			err
 		})
@@ -103,6 +97,6 @@ const signIn = async (req, res = response) => {
 
 
 module.exports = {
-	signUp,
-	signIn
+	signIn,
+	signInLs
 }

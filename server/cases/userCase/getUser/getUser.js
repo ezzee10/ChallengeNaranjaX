@@ -1,25 +1,23 @@
 const {response} = require('../userModule')
 const userRepository = require('../../../repositories/userRepository')
 
-/* Get info user by email */
-const getUserById = async (req, res = response) => {
+/* Get users */
+const getUsers = async (req, res = response) => {
 
-	const { id } = req.params
-  
 	try {
-		const userFound = await userRepository.getUserById(id)
+		const usersFound = await userRepository.getAllUsers()
   
-		if(!userFound){
+		if(usersFound.length === 0){
 			return res.status(400).json({
 				ok:false,
-				message: 'The user is not found'
+				message: 'No registered users found'
 			})
 		}
     
 		return res.status(200).json({
 			ok: true,
-			message: 'User found',
-			response: userFound
+			message: 'Users found',
+			response: usersFound
 		})  
   
 	} catch (err) {
@@ -31,6 +29,8 @@ const getUserById = async (req, res = response) => {
 	}
 }
 
+
+
 module.exports = {
-	getUserById
+	getUsers
 }
